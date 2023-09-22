@@ -73,13 +73,18 @@ const App = () => {
       }
     }
 
-    noteService.create(personObject).then((createdPerson) => {
-      setPersons(persons.concat(createdPerson));
-      setNewName("");
-      setNewNumber("");
+    noteService
+      .create(personObject)
+      .then((createdPerson) => {
+        setPersons(persons.concat(createdPerson));
+        setNewName("");
+        setNewNumber("");
 
-      handleNotification(`Added ${createdPerson.name}`, false);
-    });
+        handleNotification(`Added ${createdPerson.name}`, false);
+      })
+      .catch((error) => {
+        handleNotification(error.response.data.error, true);
+      });
   };
 
   const handleDeleteClick = (id) => {
