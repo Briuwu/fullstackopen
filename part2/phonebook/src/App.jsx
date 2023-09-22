@@ -68,6 +68,8 @@ const App = () => {
             setPersons(persons.filter((p) => p.id !== person.id));
           });
         return;
+      } else {
+        return;
       }
     }
 
