@@ -7,7 +7,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://fullstackopen:${password}@cluster0.f8njhvv.mongodb.net/personApp?retryWrites=true&w=majority`;
+const url = `mongodb+srv://fullstackopen:${password}@cluster0.f8njhvv.mongodb.net/testPersonApp?retryWrites=true&w=majority`;
 
 mongoose.set("strictQuery", false);
 mongoose.connect(url);
@@ -22,7 +22,7 @@ const Person = mongoose.model("Person", personSchema);
 const name = process.argv[3];
 const number = process.argv[4];
 
-const note = new Person({
+const person = new Person({
   name: name,
   number: number,
 });
@@ -37,7 +37,7 @@ if (process.argv.length < 4) {
     mongoose.connection.close();
   });
 } else {
-  note.save().then(() => {
+  person.save().then(() => {
     console.log("added ", name, "number", number, "to phonebook");
     mongoose.connection.close();
   });
