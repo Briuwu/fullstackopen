@@ -45,7 +45,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response) => {
   response.status(204).end();
 });
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", userExtractor, async (request, response) => {
   const body = request.body;
 
   const blog = {

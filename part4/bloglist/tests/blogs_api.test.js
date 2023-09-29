@@ -177,10 +177,34 @@ describe("updating a blog", () => {
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBlog)
+      .set("Authorization", `bearer ${token}`)
       .expect(200);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd[0].likes).toBe(10);
+  });
+
+  test("increasing likes of a blog post", async () => {
+    const blogs = await helper.blogsInDb();
+    const blogToUpdate = blogs[0];
+
+    const updatedBlog = {
+      ...blogToUpdate,
+      likes: blogToUpdate.likes + 1,
+    };
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .set("Authorization", `bearer ${token}`)
+      .expect(200);
+
+    const blogsAfterUpdate = await helper.blogsInDb();
+    const updatedBlogAfterUpdate = blogsAfterUpdate.find(
+      (blog) => blog.id === blogToUpdate.id
+    );
+
+    expect(updatedBlogAfterUpdate.likes).toBe(blogToUpdate.likes + 1);
   });
 });
 
