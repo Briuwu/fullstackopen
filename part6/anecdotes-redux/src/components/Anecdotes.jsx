@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { increaseVoteOf } from "../reducers/anecdoteReducer";
+import { updateAnecdote } from "../reducers/anecdoteReducer";
 import { displayNotification } from "../reducers/notificationReducer";
 
 const Anecdotes = () => {
@@ -12,9 +12,14 @@ const Anecdotes = () => {
     );
   });
 
-  const vote = (id) => {
+  const vote = async (id) => {
     const anecdote = anecdotes.find((anecdote) => anecdote.id === id);
-    dispatch(increaseVoteOf(id));
+    dispatch(
+      updateAnecdote(id, {
+        ...anecdote,
+        votes: anecdote.votes + 1,
+      })
+    );
     dispatch(displayNotification(`you voted '${anecdote.content}'`, 5));
   };
 
