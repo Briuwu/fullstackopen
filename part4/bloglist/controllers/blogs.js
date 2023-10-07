@@ -4,8 +4,13 @@ const User = require("../models/user");
 const { userExtractor } = require("../utils/middleware");
 
 blogsRouter.get("/", async (request, response) => {
-  const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
+  const blogs = await Blog.find({});
   response.json(blogs);
+});
+
+blogsRouter.get("/:id", async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
+  response.json(blog);
 });
 
 blogsRouter.post("/", userExtractor, async (request, response) => {
@@ -30,6 +35,26 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
   await user.save();
 
   response.status(201).json(savedBlog);
+});
+
+blogsRouter.post("/:id/comments", userExtractor, async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
+  const comment = request.body.comment;
+
+  if (!comment) {
+    return response.status(400).json({ error: "comment missing" });
+  }
+
+  blog.comments = blog.comments.concat(comment);
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  });
+  response.json(updatedBlog);
+});
+
+blogsRouter.get("/:id/comments", async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
+  response.json(blog.comments);
 });
 
 blogsRouter.delete("/:id", userExtractor, async (request, response) => {
